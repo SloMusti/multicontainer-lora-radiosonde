@@ -1,0 +1,76 @@
+# vi:syntax=dockerfile
+FROM resin/%%RESIN_MACHINE_NAME%%-debian:jessie
+
+# Dockerfile Template for Resin.io RTL-SDR Application
+#
+# Author: Glenn Stewart <gstewart@atlassian.com>
+#
+# http://www.yssyforum.net/board/showthread.php?t=11523
+# https://bitbucket.org/inodes/resin-docker-rtlsdr 
+
+# Allow systemd to run - this is required for piaware, dump1090, pfclient and fr24feed
+ENV INITSYSTEM on
+
+# Basic packages installed to allow build and install of Flightaware etc.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    apt-utils \
+    build-essential \
+    ca-certificates \
+    cmake \
+    debhelper \
+    git \
+    git-core \
+    libusb-1.0-0-dev \
+    pkg-config \
+    python \
+    python3-dev \
+    python-numpy \
+    python-setuptools \
+    python-crcmod \
+    python-requests \
+    python-dateutil \
+    python-pip \
+    sox \
+    usbutils \
+    rng-tools \
+    socat \
+    wget && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Unload the driver module to allow access to dongle
+COPY ./rtlsdr-blacklist.conf /etc/modprobe.d/rtlsdr-blacklist.conf
+
+# Install driver for RTL-SDR DVB-T Dongle
+WORKDIR /usr/src/app
+
+# Clone, compile and install RTL-SDR Drivers
+RUN git clone git://git.osmocom.org/rtl-sdr.git \
+    && cd rtl-sdr \
+    && mkdir build
+
+WORKDIR /usr/src/app/rtl-sdr/build
+RUN cmake ../ -DINSTALL_UDEV_RULES=ON -DDETACH_KERNEL_DRIVER=ON \
+    && make \
+    && make install \
+    && ldconfig
+
+# Upgrade pip
+RUN pip install -U pip
+
+# Install python package dependencies.
+COPY ./requirements.txt /requirements.txt
+RUN pip install --extra-index-url=https://www.piwheels.org/simple -r /requirements.txt
+
+WORKDIR /usr/src/app
+
+# Install radiosonde_auto_rx - https://github.com/projecthorus/radiosonde_auto_rx
+RUN git clone git://github.com/slomusti/radiosonde_auto_rx.git \
+    && cd radiosonde_auto_rx/auto_rx \
+    && ./build.sh \
+    && cp station.cfg.example station.cfg
+
+# Copy everything into the container.
+COPY . ./
+
+# Setup entry point.
+CMD ["bash", "start.sh"]

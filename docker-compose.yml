@@ -1,0 +1,14 @@
+version: '2'
+services:
+  lora:
+    build: ./lora/
+    privileged: true
+    restart: always
+    network_mode: host
+  radiosonde:
+    build: ./radiosonde/
+    privileged: true
+    restart: always
+    network_mode: host
+    ports:
+      - "80:80"
