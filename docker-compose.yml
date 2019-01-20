@@ -12,7 +12,7 @@ services:
     privileged: true
     restart: always
     network_mode: host
-    ports:
-      - "80:80"
+    expose:
+      - "80"
     volumes: 
       - 'resin-data:/data'
