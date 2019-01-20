@@ -66,8 +66,7 @@ WORKDIR /usr/src/app
 # Install radiosonde_auto_rx - https://github.com/projecthorus/radiosonde_auto_rx
 RUN git clone git://github.com/slomusti/radiosonde_auto_rx.git \
     && cd radiosonde_auto_rx/auto_rx \
-    && ./build.sh \
-    && cp station.cfg.example station.cfg
+    && ./build.sh
 
 # Copy everything into the container.
 COPY . ./
