@@ -1,4 +1,6 @@
 version: '2'
+volumes: 
+    resin-data:
 services:
   lora:
     build: ./lora/
@@ -12,3 +14,5 @@ services:
     network_mode: host
     ports:
       - "80:80"
+    volumes: 
+      - 'resin-data:/data'
