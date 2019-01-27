@@ -12,6 +12,5 @@ How to get things going: Glone and install on Balena.io, then for Lora container
 
 Edit config: `nano /data/station.cfg`
 
-
 ## Hardware
 Raspberry Pi 2B or 3B with RAK831 or IMST IC-880A LoraWAN RF frontend and RTL-SDR receiver (1-3 of them) via USB for Radiosonde decoding.
