@@ -6,7 +6,7 @@ FROM resin/%%RESIN_MACHINE_NAME%%-debian:jessie
 # Author: Glenn Stewart <gstewart@atlassian.com>
 #
 # http://www.yssyforum.net/board/showthread.php?t=11523
-# https://bitbucket.org/inodes/resin-docker-rtlsdr 
+# https://bitbucket.org/inodes/resin-docker-rtlsdr
 
 # Allow systemd to run - this is required for piaware, dump1090, pfclient and fr24feed
 ENV INITSYSTEM on
@@ -62,6 +62,9 @@ COPY ./requirements.txt /requirements.txt
 RUN pip install --extra-index-url=https://www.piwheels.org/simple -r /requirements.txt
 
 WORKDIR /usr/src/app
+
+#fetches latest version and forcesa rebuild if cached
+ADD https://api.github.com/repos/slomusti/radiosonde_auto_rx/git/refs/heads/master version.json
 
 # Install radiosonde_auto_rx - https://github.com/projecthorus/radiosonde_auto_rx
 RUN git clone git://github.com/slomusti/radiosonde_auto_rx.git \
