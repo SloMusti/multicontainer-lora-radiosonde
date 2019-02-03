@@ -1,14 +1,15 @@
 # vi:syntax=dockerfile
 FROM resin/%%RESIN_MACHINE_NAME%%-debian:jessie
 
-# Dockerfile Template for Resin.io RTL-SDR Application
+# Dockerfile Template for Balena.io RTL-SDR Application modified for radiosonde
 #
 # Author: Glenn Stewart <gstewart@atlassian.com>
+# Modified for radiosonde by: Musti <musti@wlan-si.net>
 #
 # http://www.yssyforum.net/board/showthread.php?t=11523
 # https://bitbucket.org/inodes/resin-docker-rtlsdr
 
-# Allow systemd to run - this is required for piaware, dump1090, pfclient and fr24feed
+# Allow systemd to run
 ENV INITSYSTEM on
 
 # Basic packages installed to allow build and install of Flightaware etc.
