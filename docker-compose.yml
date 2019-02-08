@@ -16,7 +16,6 @@ services:
       - "80"
     volumes:
       - 'resin-data:/data'
-    restart: always
   wpe:
     restart: always
     build: ./wpe
