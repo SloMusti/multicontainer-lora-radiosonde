@@ -16,7 +16,13 @@ services:
       - "80"
     volumes:
       - 'resin-data:/data'
+    networks:
+      - backend
   wpe:
     restart: always
     build: ./wpe
     privileged: true
+    links:
+      - radiosonde
+    networks:
+      - backend
