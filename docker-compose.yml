@@ -1,5 +1,5 @@
 version: '2'
-volumes: 
+volumes:
     resin-data:
 services:
   lora:
@@ -14,5 +14,10 @@ services:
      - "80:80"
     expose:
       - "80"
-    volumes: 
+    volumes:
       - 'resin-data:/data'
+    restart: always
+  wpe:
+    restart: always
+    build: ./wpe
+    privileged: true
